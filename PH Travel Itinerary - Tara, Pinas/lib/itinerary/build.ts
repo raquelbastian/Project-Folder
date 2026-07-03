@@ -15,7 +15,7 @@ import { addDays, daysBetween } from "@/lib/utils";
 import { buildPricingGuide } from "@/lib/pricing/guide";
 import type { PricingRecord } from "@/lib/db/dataset";
 
-function activityCost(
+function getActivityCost(
   activity: ActivityRecord,
   budgetRange: TripInput["budget_range"]
 ): number {
@@ -58,7 +58,7 @@ function selectActivitiesForDay(
       name: act.name,
       description: `${act.category} experience in ${destinationSlug.replace(/-/g, " ")}`,
       duration_minutes: act.durationMinutes,
-      cost_estimate: activityCost(act, budgetRange),
+      cost_estimate: getActivityCost(act, budgetRange),
       category: act.category,
     });
     totalDuration += act.durationMinutes;
@@ -70,7 +70,7 @@ function selectActivitiesForDay(
       name: fallback.name,
       description: `${fallback.category} experience`,
       duration_minutes: fallback.durationMinutes,
-      cost_estimate: activityCost(fallback, budgetRange),
+      cost_estimate: getActivityCost(fallback, budgetRange),
       category: fallback.category,
     });
   }
@@ -122,7 +122,7 @@ export function buildItineraryFromDataset(
           (a) => a.name.toLowerCase() === act.name.toLowerCase()
         );
         if (template) {
-          return { ...act, cost_estimate: activityCost(template, input.budget_range) };
+          return { ...act, cost_estimate: getActivityCost(template, input.budget_range) };
         }
         return act;
       });
@@ -162,7 +162,7 @@ export function buildItineraryFromDataset(
       warnings.push(...transportWarnings);
     }
 
-    const activityCost = dayActivities.reduce((sum, a) => sum + a.cost_estimate, 0);
+    const activityCostTotal = dayActivities.reduce((sum, a) => sum + a.cost_estimate, 0);
     const transportCost = transportLegs.reduce((sum, l) => sum + l.cost_estimate, 0);
 
     days.push({
@@ -171,7 +171,7 @@ export function buildItineraryFromDataset(
       destination: destName,
       transport_legs: transportLegs,
       activities: dayActivities,
-      estimated_daily_cost: activityCost + transportCost,
+      estimated_daily_cost: activityCostTotal + transportCost,
       buffer_minutes: bufferMinutes,
     });
   }

@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TransportMode {
+  flight
+  ferry
+  bus
+  van
+  jeepney
+  tricycle
+  boat
+  train
+}
+
+model Destination {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  region      String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  routesFrom       Route[]            @relation("RouteOrigin")
+  routesTo         Route[]            @relation("RouteDestination")
+  pricingEntries   PricingEntry[]
+  activityTemplates ActivityTemplate[]
+}
+
+model Route {
+  id               String        @id @default(cuid())
+  originId         String
+  destinationId    String
+  mode             TransportMode
+  operatorName     String?
+  durationMinutes  Int
+  costMin          Int
+  costMax          Int
+  scheduleNotes    String?
+  verified         Boolean       @default(true)
+  lastVerifiedDate DateTime
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  origin      Destination @relation("RouteOrigin", fields: [originId], references: [id])
+  destination Destination @relation("RouteDestination", fields: [destinationId], references: [id])
+
+  @@index([originId, destinationId])
+}
+
+model PricingEntry {
+  id               String   @id @default(cuid())
+  destinationId    String
+  itemName         String
+  category         String
+  localPriceMin    Int
+  localPriceMax    Int
+  touristPriceMin  Int
+  touristPriceMax  Int
+  note             String?
+  lastVerifiedDate DateTime
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  destination Destination @relation(fields: [destinationId], references: [id])
+
+  @@index([destinationId, category])
+}
+
+model ActivityTemplate {
+  id              String   @id @default(cuid())
+  destinationId   String
+  name            String
+  category        String
+  durationMinutes Int
+  costBudget      Int
+  costMidRange    Int
+  costFlexible    Int
+  interests       String[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  destination Destination @relation(fields: [destinationId], references: [id])
+
+  @@index([destinationId])
+}
+
+// Reserved for future auth + persistence (Feature 4/5)
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  supabaseId String  @unique
+  name      String?
+  avatarUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

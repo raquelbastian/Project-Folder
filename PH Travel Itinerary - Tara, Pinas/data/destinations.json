@@ -1,0 +1,68 @@
+[
+  {
+    "slug": "batanes",
+    "name": "Batanes",
+    "region": "Cagayan Valley",
+    "description": "Remote northern islands known for rolling hills, lighthouses, and Ivatan culture."
+  },
+  {
+    "slug": "mountain-province",
+    "name": "Mountain Province Region",
+    "region": "Cordillera",
+    "description": "Highland region including Sagada and Banaue, famous for rice terraces and caves."
+  },
+  {
+    "slug": "ilocos",
+    "name": "Ilocos",
+    "region": "Ilocos Region",
+    "description": "Historic towns, sand dunes, and coastal heritage from Vigan to Pagudpud."
+  },
+  {
+    "slug": "cebu",
+    "name": "Cebu",
+    "region": "Central Visayas",
+    "description": "Gateway to the Visayas with beaches, lechon, and whale shark encounters in Oslob."
+  },
+  {
+    "slug": "bohol",
+    "name": "Bohol",
+    "region": "Central Visayas",
+    "description": "Chocolate Hills, tarsiers, and island-hopping from Tagbilaran and Panglao."
+  },
+  {
+    "slug": "boracay",
+    "name": "Boracay",
+    "region": "Western Visayas",
+    "description": "World-famous white-sand beach destination off Panay Island."
+  },
+  {
+    "slug": "siargao",
+    "name": "Siargao",
+    "region": "Caraga",
+    "description": "Surf capital of the Philippines with Cloud 9 and island-hopping."
+  },
+  {
+    "slug": "palawan",
+    "name": "Palawan",
+    "region": "MIMAROPA",
+    "description": "El Nido, Coron, and Puerto Princesa — lagoons, limestone cliffs, and underground rivers."
+  },
+  {
+    "slug": "metro-manila",
+    "name": "Metro Manila",
+    "region": "NCR",
+    "description": "Capital region hub with Intramuros, museums, and major transport connections."
+  },
+  {
+    "slug": "davao",
+    "name": "Davao",
+    "region": "Davao Region",
+    "description": "Mindanao gateway with Mount Apo, durian, and Samal Island access."
+  },
+  {
+    "slug": "cagayan-de-oro",
+    "name": "Cagayan de Oro",
+    "region": "Northern Mindanao",
+    "description": "Adventure capital of Mindanao with white-water rafting and Camiguin ferry links."
+  }
+]

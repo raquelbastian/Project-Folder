@@ -1,0 +1,222 @@
+[
+  {
+    "destination": "batanes",
+    "name": "Marlboro Country viewpoint",
+    "category": "sightseeing",
+    "durationMinutes": 120,
+    "costBudget": 200,
+    "costMidRange": 400,
+    "costFlexible": 600,
+    "interests": ["hiking", "photography", "culture"]
+  },
+  {
+    "destination": "batanes",
+    "name": "Sabtang Island day trip",
+    "category": "island",
+    "durationMinutes": 480,
+    "costBudget": 800,
+    "costMidRange": 1200,
+    "costFlexible": 1800,
+    "interests": ["culture", "photography"]
+  },
+  {
+    "destination": "mountain-province",
+    "name": "Sagada cave connection",
+    "category": "adventure",
+    "durationMinutes": 240,
+    "costBudget": 600,
+    "costMidRange": 900,
+    "costFlexible": 1400,
+    "interests": ["hiking", "culture"]
+  },
+  {
+    "destination": "mountain-province",
+    "name": "Banaue rice terraces trek",
+    "category": "sightseeing",
+    "durationMinutes": 180,
+    "costBudget": 100,
+    "costMidRange": 300,
+    "costFlexible": 600,
+    "interests": ["hiking", "photography", "culture"]
+  },
+  {
+    "destination": "ilocos",
+    "name": "Vigan heritage walk",
+    "category": "culture",
+    "durationMinutes": 180,
+    "costBudget": 150,
+    "costMidRange": 350,
+    "costFlexible": 600,
+    "interests": ["culture", "history", "food"]
+  },
+  {
+    "destination": "ilocos",
+    "name": "Paoay Sand Dunes 4x4",
+    "category": "adventure",
+    "durationMinutes": 120,
+    "costBudget": 500,
+    "costMidRange": 800,
+    "costFlexible": 1200,
+    "interests": ["beach", "photography"]
+  },
+  {
+    "destination": "cebu",
+    "name": "Oslob whale shark snorkeling",
+    "category": "wildlife",
+    "durationMinutes": 180,
+    "costBudget": 800,
+    "costMidRange": 1500,
+    "costFlexible": 2500,
+    "interests": ["diving", "beach"]
+  },
+  {
+    "destination": "cebu",
+    "name": "Cebu City food crawl",
+    "category": "food",
+    "durationMinutes": 180,
+    "costBudget": 300,
+    "costMidRange": 600,
+    "costFlexible": 1200,
+    "interests": ["food", "culture"]
+  },
+  {
+    "destination": "bohol",
+    "name": "Chocolate Hills + tarsier sanctuary",
+    "category": "sightseeing",
+    "durationMinutes": 300,
+    "costBudget": 400,
+    "costMidRange": 800,
+    "costFlexible": 1400,
+    "interests": ["photography", "culture"]
+  },
+  {
+    "destination": "bohol",
+    "name": "Panglao island-hopping",
+    "category": "beach",
+    "durationMinutes": 360,
+    "costBudget": 600,
+    "costMidRange": 1200,
+    "costFlexible": 2000,
+    "interests": ["beach", "diving"]
+  },
+  {
+    "destination": "boracay",
+    "name": "White Beach sunset + paraw sail",
+    "category": "beach",
+    "durationMinutes": 120,
+    "costBudget": 250,
+    "costMidRange": 500,
+    "costFlexible": 900,
+    "interests": ["beach", "photography"]
+  },
+  {
+    "destination": "boracay",
+    "name": "Water sports package (helmet dive + parasailing)",
+    "category": "adventure",
+    "durationMinutes": 240,
+    "costBudget": 1500,
+    "costMidRange": 2500,
+    "costFlexible": 4000,
+    "interests": ["beach", "diving"]
+  },
+  {
+    "destination": "siargao",
+    "name": "Cloud 9 sunrise surf session",
+    "category": "surf",
+    "durationMinutes": 180,
+    "costBudget": 300,
+    "costMidRange": 600,
+    "costFlexible": 1200,
+    "interests": ["beach"]
+  },
+  {
+    "destination": "siargao",
+    "name": "Sugba Lagoon + island hopping",
+    "category": "island",
+    "durationMinutes": 480,
+    "costBudget": 700,
+    "costMidRange": 1200,
+    "costFlexible": 2000,
+    "interests": ["beach", "photography"]
+  },
+  {
+    "destination": "palawan",
+    "name": "El Nido Tour A (lagoons)",
+    "category": "island",
+    "durationMinutes": 480,
+    "costBudget": 1000,
+    "costMidRange": 1600,
+    "costFlexible": 2500,
+    "interests": ["beach", "diving", "photography"]
+  },
+  {
+    "destination": "palawan",
+    "name": "Underground River day tour",
+    "category": "nature",
+    "durationMinutes": 360,
+    "costBudget": 800,
+    "costMidRange": 1500,
+    "costFlexible": 2500,
+    "interests": ["culture", "photography"]
+  },
+  {
+    "destination": "metro-manila",
+    "name": "Intramuros historical walk",
+    "category": "culture",
+    "durationMinutes": 180,
+    "costBudget": 200,
+    "costMidRange": 500,
+    "costFlexible": 900,
+    "interests": ["history", "culture", "food"]
+  },
+  {
+    "destination": "metro-manila",
+    "name": "Binondo food tour",
+    "category": "food",
+    "durationMinutes": 180,
+    "costBudget": 300,
+    "costMidRange": 600,
+    "costFlexible": 1000,
+    "interests": ["food", "culture"]
+  },
+  {
+    "destination": "davao",
+    "name": "Samal Island beach day",
+    "category": "beach",
+    "durationMinutes": 360,
+    "costBudget": 300,
+    "costMidRange": 700,
+    "costFlexible": 1200,
+    "interests": ["beach", "food"]
+  },
+  {
+    "destination": "davao",
+    "name": "Eden Nature Park visit",
+    "category": "nature",
+    "durationMinutes": 240,
+    "costBudget": 200,
+    "costMidRange": 500,
+    "costFlexible": 900,
+    "interests": ["hiking", "photography"]
+  },
+  {
+    "destination": "cagayan-de-oro",
+    "name": "White-water rafting (Cagayan de Oro River)",
+    "category": "adventure",
+    "durationMinutes": 240,
+    "costBudget": 900,
+    "costMidRange": 1500,
+    "costFlexible": 2500,
+    "interests": ["hiking"]
+  },
+  {
+    "destination": "cagayan-de-oro",
+    "name": "Macahambus Gorge adventure",
+    "category": "nature",
+    "durationMinutes": 180,
+    "costBudget": 100,
+    "costMidRange": 300,
+    "costFlexible": 600,
+    "interests": ["hiking", "photography"]
+  }
+]

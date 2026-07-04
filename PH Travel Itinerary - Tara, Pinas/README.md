@@ -7,7 +7,7 @@ AI-powered Philippine travel itinerary planner — grounded in curated transport
 - **Next.js 14** (App Router) + **React 19** + **TypeScript** (strict)
 - **Tailwind CSS v4** + shadcn/ui-style components
 - **Supabase** (PostgreSQL, Auth, Storage) + **Prisma ORM**
-- **Vercel AI SDK** + Anthropic Claude 3.5 Sonnet
+- **Vercel AI SDK** + Vocareum OpenAI-compatible API
 - Deployed on **Vercel**
 
 ## Features (v1)
@@ -25,7 +25,7 @@ AI-powered Philippine travel itinerary planner — grounded in curated transport
 - Node.js 18+
 - npm
 - (Optional) Supabase project for database seeding
-- (Optional) Anthropic API key for AI-enhanced activity suggestions
+- (Optional) Vocareum OpenAI API key for AI-enhanced activity suggestions
 
 ### Install
 
@@ -41,7 +41,11 @@ cp .env.example .env.local
 | `DATABASE_URL` | Optional* | Supabase PostgreSQL connection string |
 | `NEXT_PUBLIC_SUPABASE_URL` | Optional | Supabase project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Optional | Supabase anon key |
-| `ANTHROPIC_API_KEY` | Optional | Enables Claude activity planning (falls back to dataset-only) |
+| `OPENAI_API_KEY` | Optional | Enables Vocareum OpenAI activity planning (falls back to dataset-only) |
+| `OPENAI_API_BASE_URL` | Optional | Override the OpenAI-compatible endpoint; defaults to https://openai.vocareum.com/v1 |
+| `OPENAI_MODEL` | Optional | Model name to use; defaults to gpt-4o-mini |
+
+> For AI generation, set `OPENAI_API_KEY` to your Vocareum OpenAI API key and optionally configure the endpoint/model above.
 
 \*Without `DATABASE_URL`, the app uses bundled JSON seed data in `/data`.
 
@@ -62,7 +66,7 @@ Open [http://localhost:3000](http://localhost:3000).
 ## Architecture
 
 **Approach A (hybrid):**
-- **AI (Claude)** suggests day-by-day activities from the curated dataset
+- **AI (Vocareum OpenAI)** suggests day-by-day activities from the curated dataset
 - **Deterministic engine** handles transport chaining, risk flags, pricing guide, and cost estimates
 - **JSON fallback** when database is not configured
 

@@ -3,7 +3,7 @@
 **Status**: Draft
 **Last updated**: June 30, 2026
 
-This spec covers all 5 core v1 features. Each follows the same structure: Context & Goal, Inputs & Outputs, Behavior Rules, Constraints, Acceptance Criteria.
+This spec covers all 3 core v1 features. Each follows the same structure: Context & Goal, Inputs & Outputs, Behavior Rules, Constraints, Acceptance Criteria.
 
 ## Tech Stack & Architecture
 
@@ -24,8 +24,9 @@ This spec covers all 5 core v1 features. Each follows the same structure: Contex
 We are utilizing the **Vercel AI SDK** as the unified interface to orchestrate and stream model responses, providing the flexibility to switch or combine upstream LLM providers.
 
 **Core SDK:** `ai` (Vercel AI SDK)
-**Primary Providers:**
-- **Anthropic (Claude):** Used for advanced reasoning, complex coding tasks, and nuanced content generation (via `@ai-sdk/anthropic`).
+### **Primary Providers:**
+### - **Anthropic (Claude):** Used for advanced reasoning, complex coding tasks, and nuanced content generation (via `@ai-sdk/anthropic`).
+**Primary Logic Model:** `gemini-1.5-pro` for deep reasoning, heavy context, nuanced content generation and complex coding (via @ai-sdk/google)
 
 | Component | Technology / Provider | Purpose |
 | :--- | :--- | :--- |

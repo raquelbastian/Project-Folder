@@ -1,5 +1,4 @@
-import { anthropic } from "@ai-sdk/anthropic";
-import { generateText } from "ai";
+import { loadEnvConfig } from "@next/env";
 import { NextResponse } from "next/server";
 import { buildItineraryPrompt } from "@/lib/ai/prompts/itinerary";
 import { THRESHOLDS } from "@/lib/config/thresholds";
@@ -22,6 +21,8 @@ import { daysBetween } from "@/lib/utils";
 
 export const maxDuration = 90;
 
+loadEnvConfig(process.cwd());
+
 interface AiDayResponse {
   day_number: number;
   activities: Array<{
@@ -32,16 +33,34 @@ interface AiDayResponse {
   }>;
 }
 
+function extractJsonPayload(text: string): string {
+  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+  const candidate = fenced?.[1] ?? text;
+  const firstBrace = candidate.indexOf("{");
+  const lastBrace = candidate.lastIndexOf("}");
+
+  if (firstBrace >= 0 && lastBrace > firstBrace) {
+    return candidate.slice(firstBrace, lastBrace + 1).trim();
+  }
+
+  return candidate.trim();
+}
+
 async function parseAiActivities(
   text: string,
   input: Parameters<typeof buildItineraryFromDataset>[0]["input"]
 ): Promise<Record<number, Activity[]> | undefined> {
   try {
-    const cleaned = text.replace(/```json\n?|\n?```/g, "").trim();
-    const parsed = JSON.parse(cleaned) as { days: AiDayResponse[] };
+    const payload = extractJsonPayload(text);
+    const parsed = JSON.parse(payload) as { days: AiDayResponse[] };
     const result: Record<number, Activity[]> = {};
 
+    if (!Array.isArray(parsed.days)) {
+      return undefined;
+    }
+
     for (const day of parsed.days) {
+      if (!day || !Array.isArray(day.activities)) continue;
       result[day.day_number] = day.activities.map((a) => ({
         name: a.name,
         description: a.description,
@@ -51,8 +70,9 @@ async function parseAiActivities(
       }));
     }
 
-    return result;
-  } catch {
+    return Object.keys(result).length > 0 ? result : undefined;
+  } catch (error) {
+    console.warn("Failed to parse AI itinerary JSON:", error, text);
     return undefined;
   }
 }
@@ -125,7 +145,11 @@ export async function POST(request: Request) {
 
     let aiActivities: Record<number, Activity[]> | undefined;
 
-    if (process.env.ANTHROPIC_API_KEY) {
+    const openAiApiKey = process.env.OPENAI_API_KEY;
+    const openAiBaseUrl = process.env.OPENAI_API_BASE_URL || "https://openai.vocareum.com/v1";
+    const openAiModel = process.env.OPENAI_MODEL || "gpt-4o-mini";
+
+    if (openAiApiKey) {
       const datasetContext = await buildDatasetContext({
         ...input,
         destinations: valid,
@@ -144,12 +168,46 @@ export async function POST(request: Request) {
       );
 
       try {
-        const { text } = await generateText({
-          model: anthropic("claude-3-5-sonnet-20241022"),
-          prompt,
-          abortSignal: controller.signal,
+        const response = await fetch(`${openAiBaseUrl.replace(/\/$/, "")}/chat/completions`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${openAiApiKey}`,
+          },
+          body: JSON.stringify({
+            model: openAiModel,
+            messages: [
+              {
+                role: "system",
+                content:
+                  "You are Tara, Pinas. Respond with valid JSON only in the requested itinerary schema.",
+              },
+              { role: "user", content: prompt },
+            ],
+            temperature: 0.7,
+          }),
+          signal: controller.signal,
         });
+
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data?.error?.message || "OpenAI request failed.");
+        }
+
+        const text =
+          typeof data?.choices?.[0]?.message?.content === "string"
+            ? data.choices[0].message.content
+            : "";
+
+        if (!text) {
+          throw new Error("OpenAI returned an empty response.");
+        }
+
+        console.log("Raw AI itinerary response:", text);
         aiActivities = await parseAiActivities(text, input);
+        if (!aiActivities) {
+          console.warn("AI response was not parsed into itinerary activities.", text);
+        }
       } catch (aiError) {
         console.warn("AI generation fallback to dataset-only:", aiError);
       } finally {

@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock, MapPin } from "lucide-react";
+import { Clock, MapPin, Sparkles } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TransportLegs, WarningsList } from "@/components/itinerary/TransportLegs";
@@ -25,6 +25,17 @@ export function ItineraryView({ itinerary }: ItineraryViewProps) {
             </span>
           </p>
         </div>
+        <Badge
+          variant={itinerary.generation_source === "ai" ? "default" : "secondary"}
+          className={
+            itinerary.generation_source === "ai"
+              ? "bg-emerald-600 text-white"
+              : "bg-slate-100 text-slate-700"
+          }
+        >
+          <Sparkles className="mr-1 h-3.5 w-3.5" />
+          {itinerary.generation_source === "ai" ? "AI-assisted plan" : "Dataset-backed plan"}
+        </Badge>
       </div>
 
       {itinerary.warnings.length > 0 && <WarningsList warnings={itinerary.warnings} />}

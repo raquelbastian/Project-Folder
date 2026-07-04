@@ -106,27 +106,25 @@ export function buildItineraryFromDataset(
     const slug = daySchedule[i];
     const destName = destinationNames.get(slug) ?? slug;
 
-    let dayActivities =
-      params.aiActivities?.[i + 1] ??
-      selectActivitiesForDay(
-        slug,
-        activities,
-        input.budget_range,
-        input.interests ?? [],
-        maxActivities
-      );
+    const aiPlanForDay = params.aiActivities?.[i + 1];
 
-    if (params.aiActivities?.[i + 1]) {
-      dayActivities = dayActivities.map((act) => {
-        const template = activities.find(
-          (a) => a.name.toLowerCase() === act.name.toLowerCase()
+    const dayActivities = aiPlanForDay
+      ? aiPlanForDay.map((act) => {
+          const template = activities.find(
+            (a) => a.name.toLowerCase() === act.name.toLowerCase()
+          );
+          if (template) {
+            return { ...act, cost_estimate: getActivityCost(template, input.budget_range) };
+          }
+          return act;
+        })
+      : selectActivitiesForDay(
+          slug,
+          activities,
+          input.budget_range,
+          input.interests ?? [],
+          maxActivities
         );
-        if (template) {
-          return { ...act, cost_estimate: getActivityCost(template, input.budget_range) };
-        }
-        return act;
-      });
-    }
 
     let transportLegs: ItineraryDay["transport_legs"] = [];
 
@@ -189,6 +187,7 @@ export function buildItineraryFromDataset(
     warnings: [...new Set(warnings)],
     pricing_guide,
     savings_summary,
+    generation_source: params.aiActivities ? "ai" : "dataset",
   };
 }
 

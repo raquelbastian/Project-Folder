@@ -3,7 +3,7 @@
 import { AlertTriangle, Bus, Plane, Ship } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { TransportLeg } from "@/lib/schemas/itinerary";
-import { cn, formatCurrency } from "@/lib/utils";
+import { cn, formatCurrency, formatTransportEstimate } from "@/lib/utils";
 
 const modeIcons: Record<string, React.ReactNode> = {
   flight: <Plane className="h-4 w-4" />,
@@ -65,8 +65,8 @@ export function TransportLegs({ legs }: TransportLegsProps) {
                   {leg.mode}: {leg.origin} → {leg.destination}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  {leg.departure_estimate} – {leg.arrival_estimate}
-                  {leg.operator_name && ` · ${leg.operator_name}`}
+                   {/* {formatTransportEstimate(leg.departure_estimate)} – {formatTransportEstimate(leg.arrival_estimate)} */}
+                  {leg.operator_name && `  ${leg.operator_name}`}
                 </p>
               </div>
             </div>

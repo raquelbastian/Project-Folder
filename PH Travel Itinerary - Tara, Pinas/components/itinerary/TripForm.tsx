@@ -103,7 +103,7 @@ export function TripForm() {
           Plan your trip
         </CardTitle>
         <CardDescription>
-          Pick destinations, dates, and travel style — we&apos;ll build a grounded day-by-day plan.
+          Pick one destination, dates, and travel style — we&apos;ll build a grounded day-by-day plan.
         </CardDescription>
       </CardHeader>
       <CardContent>

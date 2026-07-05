@@ -93,6 +93,7 @@ export const itineraryOutputSchema = z.object({
       note: z.string(),
     })
     .optional(),
+  generation_source: z.enum(["ai", "dataset"]).optional().default("dataset"),
 });
 
 export type ItineraryOutput = z.infer<typeof itineraryOutputSchema>;

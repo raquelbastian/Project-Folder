@@ -13,6 +13,50 @@ export function formatCurrency(amount: number): string {
   }).format(amount);
 }
 
+export function formatTransportEstimate(value: string | Date | null | undefined): string {
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime())
+      ? "—"
+      : value.toLocaleTimeString("en-PH", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        });
+  }
+
+  if (typeof value !== "string") return "—";
+
+  const trimmed = value.trim();
+  if (!trimmed) return "—";
+
+  if (/^(invalid(?: date)?|tbd|n\/a)$/i.test(trimmed)) {
+    return "—";
+  }
+
+  if (/^\d{1,2}:\d{2}(\s*(AM|PM))?$/i.test(trimmed)) {
+    return trimmed;
+  }
+
+  if (/^\d{1,2}\s*(AM|PM)$/i.test(trimmed)) {
+    return trimmed.toUpperCase();
+  }
+
+  const normalized = trimmed
+    .replace(/\s+/g, " ")
+    .replace(/(\d{4}-\d{2}-\d{2})\s+(\d{1,2}:\d{2})/, "$1T$2");
+
+  const parsed = new Date(normalized);
+  if (!Number.isNaN(parsed.getTime())) {
+    return parsed.toLocaleTimeString("en-PH", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  }
+
+  return trimmed;
+}
+
 export function formatDuration(minutes: number): string {
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;

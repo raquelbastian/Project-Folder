@@ -71,14 +71,17 @@ export function resolveAiActivitySelection(
   };
 }
 
-function selectActivitiesForDay(
+export function selectActivitiesForDay(
   destinationSlug: string,
   activities: ActivityRecord[],
   budgetRange: TripInput["budget_range"],
   interests: string[],
-  maxActivities: number
+  maxActivities: number,
+  excludeActivityNames: Set<string> = new Set()
 ): Activity[] {
-  let pool = activities.filter((a) => a.destination === destinationSlug);
+  let pool = activities.filter(
+    (a) => a.destination === destinationSlug && !excludeActivityNames.has(a.name)
+  );
 
   if (interests.length > 0) {
     const scored = pool.map((a) => ({
@@ -142,6 +145,7 @@ export function buildItineraryFromDataset(
 
   const days: ItineraryDay[] = [];
   const warnings: string[] = [];
+  const usedActivitiesByDestination = new Map<string, Set<string>>();
 
   for (let i = 0; i < numDays; i++) {
     const date = addDays(input.start_date, i);
@@ -150,6 +154,7 @@ export function buildItineraryFromDataset(
 
     const aiPlanForDay = params.aiActivities?.[i + 1];
 
+    const excludedActivities = usedActivitiesByDestination.get(slug) ?? new Set<string>();
     const dayActivities = aiPlanForDay
       ? aiPlanForDay.map((act) =>
           resolveAiActivitySelection(act, slug, activities, input.budget_range)
@@ -159,8 +164,15 @@ export function buildItineraryFromDataset(
           activities,
           input.budget_range,
           input.interests ?? [],
-          maxActivities
+          maxActivities,
+          excludedActivities
         );
+
+    // Track used activities for this destination
+    if (!usedActivitiesByDestination.has(slug)) {
+      usedActivitiesByDestination.set(slug, new Set<string>());
+    }
+    dayActivities.forEach((act) => usedActivitiesByDestination.get(slug)!.add(act.name));
 
     let transportLegs: ItineraryDay["transport_legs"] = [];
 

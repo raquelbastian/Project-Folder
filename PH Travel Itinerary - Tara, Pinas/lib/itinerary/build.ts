@@ -29,6 +29,48 @@ function getActivityCost(
   }
 }
 
+export function resolveAiActivitySelection(
+  activity: { name: string; description?: string; duration_minutes?: number; category?: string },
+  destinationSlug: string,
+  activities: ActivityRecord[],
+  budgetRange: TripInput["budget_range"]
+): Activity {
+  const pool = activities.filter((a) => a.destination === destinationSlug);
+
+  const exact = pool.find((a) => a.name.toLowerCase() === activity.name.toLowerCase());
+  if (exact) {
+    return {
+      name: exact.name,
+      description: activity.description ?? `${exact.category} experience in ${destinationSlug.replace(/-/g, " ")}`,
+      duration_minutes: activity.duration_minutes ?? exact.durationMinutes,
+      cost_estimate: getActivityCost(exact, budgetRange),
+      category: exact.category,
+    };
+  }
+
+  const byCategory = pool.find((a) =>
+    activity.category ? a.category.toLowerCase() === activity.category.toLowerCase() : false
+  );
+  if (byCategory) {
+    return {
+      name: byCategory.name,
+      description: activity.description ?? `${byCategory.category} experience in ${destinationSlug.replace(/-/g, " ")}`,
+      duration_minutes: activity.duration_minutes ?? byCategory.durationMinutes,
+      cost_estimate: getActivityCost(byCategory, budgetRange),
+      category: byCategory.category,
+    };
+  }
+
+  const fallback = pool[0];
+  return {
+    name: fallback?.name ?? activity.name,
+    description: activity.description ?? `${fallback?.category ?? "local"} experience in ${destinationSlug.replace(/-/g, " ")}`,
+    duration_minutes: activity.duration_minutes ?? fallback?.durationMinutes ?? 120,
+    cost_estimate: fallback ? getActivityCost(fallback, budgetRange) : 0,
+    category: fallback?.category ?? activity.category ?? "local",
+  };
+}
+
 function selectActivitiesForDay(
   destinationSlug: string,
   activities: ActivityRecord[],
@@ -109,15 +151,9 @@ export function buildItineraryFromDataset(
     const aiPlanForDay = params.aiActivities?.[i + 1];
 
     const dayActivities = aiPlanForDay
-      ? aiPlanForDay.map((act) => {
-          const template = activities.find(
-            (a) => a.name.toLowerCase() === act.name.toLowerCase()
-          );
-          if (template) {
-            return { ...act, cost_estimate: getActivityCost(template, input.budget_range) };
-          }
-          return act;
-        })
+      ? aiPlanForDay.map((act) =>
+          resolveAiActivitySelection(act, slug, activities, input.budget_range)
+        )
       : selectActivitiesForDay(
           slug,
           activities,
